@@ -1,0 +1,12 @@
+apt_cache_ttl: 604800  # one week
+
+q3a_dir: ~/.q3a
+
+q3a_maps_file: "{{ q3a_dir }}/q3a_maps.zip"
+q3a_maps_file_url: "https://www.dropbox.com/sh/ovdv74yrft30rmk/AACh-EPOXJUGbUXuTgCOKChwa?dl=1"
+
+q3a_latest_pk3s: "{{ q3a_dir }}/quake3-latest-pk3s.zip"
+q3a_latest_pk3s_dir: "{{ q3a_dir }}/quake3-latest-pk3s"
+q3a_latest_pk3s_url: "https://www.dropbox.com/s/a7evnvqfn29smi7/quake3-latest-pk3s.zip?dl=1"
+
+q3a_autoexec_cfg: "{{q3a_dir}}/baseq3/autoexec.cfg"

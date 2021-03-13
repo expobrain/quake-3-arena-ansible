@@ -1,0 +1,8 @@
+- name: Download maps
+  import_tasks: maps.yaml
+
+- name: Install Q3A
+  import_tasks: install.yaml
+
+- name: Configure Q3A
+  import_tasks: config.yaml

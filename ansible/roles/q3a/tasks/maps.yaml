@@ -1,0 +1,79 @@
+# ------------------------------------------
+# Download maps
+# ------------------------------------------
+
+- name: Install needed packages
+  become: yes
+  apt:
+    update_cache: true
+    cache_valid_time: "{{apt_cache_ttl}}"
+    state: latest
+    name:
+      - unzip
+
+- name: Check if maps package exists
+  stat:
+    path: "{{q3a_maps_file}}"
+  register: st
+
+- name: Download maps packages (it can take a while)
+  get_url:
+    url: "{{q3a_maps_file_url}}"
+    dest: "{{q3a_maps_file}}"
+    mode: 0600
+  when: st.stat.exists == false
+
+- name: Copy maps (it can take a while)
+  unarchive:
+    remote_src: yes
+    src: "{{q3a_maps_file}}"
+    dest: "{{q3a_dir}}"
+    exclude: # needed because of Dropbox way of making zips
+      - /
+
+# ------------------------------------------
+# Download point release
+# ------------------------------------------
+
+- name: Check if point release package exists
+  stat:
+    path: "{{q3a_latest_pk3s}}"
+  register: st
+
+- name: Download point release packages (it can take a while)
+  get_url:
+    url: "{{q3a_latest_pk3s_url}}"
+    dest: "{{q3a_latest_pk3s}}"
+  when: st.stat.exists == false
+
+- name: Uncompress point release (it can take a while)
+  unarchive:
+    remote_src: yes
+    src: "{{q3a_latest_pk3s}}"
+    dest: "{{q3a_dir}}"
+    exclude: # needed because of Dropbox way of making zips
+      - /
+
+- name: Enumerate directories to copy
+  find:
+    paths: "{{q3a_latest_pk3s_dir}}"
+    file_type: directory
+  register: dirs
+
+- name: Copy point release files into place (can take a while)
+  copy:
+    remote_src: yes
+    src: "{{item.path}}"
+    dest: "{{q3a_dir}}"
+  with_items: "{{dirs.files}}"
+
+# # ------------------------------------------
+# # Fix permissions
+# # ------------------------------------------
+
+# - name: "Fix directory permissions"
+#   file:
+#     path: "{{q3a_dir}}"
+#     state: directory
+#     mode: u=rwX,g=rX,o=
+#     recurse: yes

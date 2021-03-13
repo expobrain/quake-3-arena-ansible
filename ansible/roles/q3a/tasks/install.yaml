@@ -1,0 +1,13 @@
+- name: Install Q3A
+  become: yes
+  apt:
+    update_cache: true
+    cache_valid_time: "{{apt_cache_ttl}}"
+    state: latest
+    name:
+      - ioquake3
+
+- name: Adds alias to Q3A binary
+  lineinfile:
+    path: ~/.bashrc
+    line: alias ioquake3='/usr/lib/ioquake3/ioquake3'
