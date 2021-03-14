@@ -5,6 +5,7 @@
 To automatically setup the `ioquake3` package in Linux with ansible just run:
 
 ```shell
+sudo apt install ansible
 ./setup.sh
 ```
 
